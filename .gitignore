@@ -10,3 +10,4 @@ Cargo.lock
 .env
 .env.local
 *.keypair.json
+test-ledger/
