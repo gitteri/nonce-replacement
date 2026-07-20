@@ -7,10 +7,10 @@ resulting signature plus a Solana Explorer link so you can verify on-chain yours
 
 ## Status
 
-All 9 scripts are verified end-to-end against a local `solana-test-validator` (Agave 3.1.8)
-running the real, unmodified Vector Ed25519 program. Public devnet deployment is written up below
-and code-identical (same scripts, just point `DEVNET_RPC_URL` at devnet and use a devnet-deployed
-`VECTOR_DEVNET_PROGRAM_ID`) but is currently blocked on funding — see "Devnet deployment" below.
+All 9 scripts are verified end-to-end against **real devnet**, landing real transactions (see each
+script's console output for signatures/Explorer links). They were also verified against a local
+`solana-test-validator` (Agave 3.1.8) along the way — see "Local-validator fallback" below if you
+want to iterate without touching devnet or spending devnet SOL.
 
 ## Devnet deployment
 
@@ -24,7 +24,10 @@ don't hold the private key for the canonical vanity address. `lib/vectorProgram.
 and re-derives the SDK's `*Ed25519` convenience wrappers (which hardcode the canonical program ID)
 against this program ID instead.
 
-To deploy:
+This repo's own deployment lives at **`FR1dUTeUCeGiHC4y4aAR2AgqcXvmLAkLv9KDvFwRB14y`** on devnet
+(deployed 2026-07-20, built from the exact source pinned in `solutions/vector/rust/Cargo.toml`) and
+is the default `lib/vectorProgram.ts` falls back to — scripts run out of the box with no deploy
+step. Set `VECTOR_DEVNET_PROGRAM_ID` to point at your own deployment instead:
 
 ```
 solana-keygen new -o .devnet/vector-ed25519.keypair.json   # first time only
@@ -36,16 +39,19 @@ export VECTOR_DEVNET_PROGRAM_ID=$(solana-keygen pubkey .devnet/vector-ed25519.ke
 ```
 
 Deploying a ~212KB program needs about **1.48 SOL** in the deploying/upgrade-authority wallet
-(rent-exemption for the program + program-data accounts). As of this writing that deploy is
-blocked in this environment: the devnet airdrop faucet is rate-limited per IP and returns
-`"You've either reached your airdrop limit today"` on every attempt, and the only funded local
-wallet (`~/.config/solana/id.json`) holds 1.3536 SOL — about 0.13 SOL short. Fund that wallet (or
-the deploy keypair directly) at https://faucet.solana.com, or wait for the daily limit to reset,
-then run the deploy command above.
+(rent-exemption for the program + program-data accounts) — fund it at https://faucet.solana.com.
+Note the payer is your default Solana CLI identity (`solana config get` → Keypair Path), *not* the
+`--program-id` keypair — the program-id keypair only needs to exist to sign as the new address, it
+doesn't need a balance itself.
 
-### Local-validator fallback (already verified)
+The public devnet RPC (`https://api.devnet.solana.com`) is aggressively rate-limited (expect lots
+of `429` retries in the console output — the scripts back off and retry automatically, they just
+take a while). Set `DEVNET_RPC_URL` to a private RPC endpoint (Helius, Triton, QuickNode, etc.) for
+much faster runs.
 
-To exercise all 9 scripts right now without devnet funding, run against a local validator loaded
+### Local-validator fallback
+
+To exercise all 9 scripts without touching devnet at all, run against a local validator loaded
 with the same program at its canonical address (no deploy-cost rent required — genesis-loaded
 programs don't need to be paid for):
 

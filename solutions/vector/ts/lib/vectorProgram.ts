@@ -11,6 +11,12 @@
  * included. Since we deploy under a different address, this module
  * re-derives the same thin wrappers around the SDK's generic (non-hardcoded)
  * primitives, bound to our devnet program ID instead.
+ *
+ * `FR1dUTeUCeGiHC4y4aAR2AgqcXvmLAkLv9KDvFwRB14y` is this repo's own devnet
+ * deployment (built from the exact source pinned in
+ * `solutions/vector/rust/Cargo.toml`, deployed 2026-07-20), used as the
+ * default so scripts and the site work without every user redeploying.
+ * Override with `VECTOR_DEVNET_PROGRAM_ID` to point at your own.
  */
 import { Address, TransactionInstruction } from "@solana/web3.js";
 import { ed25519 } from "@noble/curves/ed25519.js";
@@ -22,13 +28,8 @@ import {
   createInitializeInstruction,
 } from "vector-sdk";
 
-const programIdEnv = process.env.VECTOR_DEVNET_PROGRAM_ID;
-if (!programIdEnv) {
-  throw new Error(
-    "VECTOR_DEVNET_PROGRAM_ID is not set. Deploy programs/ed25519 to devnet " +
-      "(see README.md) and export its program ID before running these scripts."
-  );
-}
+const DEFAULT_DEVNET_PROGRAM_ID = "FR1dUTeUCeGiHC4y4aAR2AgqcXvmLAkLv9KDvFwRB14y";
+const programIdEnv = process.env.VECTOR_DEVNET_PROGRAM_ID ?? DEFAULT_DEVNET_PROGRAM_ID;
 
 /** The devnet-deployed Ed25519 Scheme: identical to the SDK's `ED25519` bar the program ID. */
 export const ED25519_DEVNET: Scheme = {
