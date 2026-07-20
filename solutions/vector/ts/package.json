@@ -1,0 +1,33 @@
+{
+  "name": "@nonce-replacement/vector-ts",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Devnet example scripts proving Blueshift Vector satisfies the nonce-replacement functional requirements",
+  "scripts": {
+    "postinstall": "tsc -p node_modules/vector-sdk/tsconfig.json",
+    "01": "tsx scripts/01-time-window.ts",
+    "02": "tsx scripts/02-concurrency.ts",
+    "03": "tsx scripts/03-fee-payer-separation.ts",
+    "04": "tsx scripts/04-transaction-integrity.ts",
+    "05": "tsx scripts/05-selective-revocation.ts",
+    "06": "tsx scripts/06-no-onchain-footprint.ts",
+    "07": "tsx scripts/07-parsability.ts",
+    "08": "tsx scripts/08-state-change-tolerance.ts",
+    "09": "tsx scripts/09-composability.ts"
+  },
+  "dependencies": {
+    "vector-sdk": "link:.vendor/vector",
+    "@solana/web3.js": "3.0.0-rc.0",
+    "@noble/curves": "^1.8.0",
+    "@noble/hashes": "^1.7.0",
+    "@noble/post-quantum": "^0.6.1",
+    "@blueshift-gg/hawk512": "0.0.0",
+    "@solana/spl-token": "^0.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.4.0"
+  }
+}
