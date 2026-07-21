@@ -10,6 +10,12 @@ importers:
 
   site:
     dependencies:
+      '@noble/curves':
+        specifier: ^1.8.0
+        version: 1.9.7
+      '@solana/spl-token':
+        specifier: ^0.4.9
+        version: 0.4.15(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@6.0.6)
       '@solana/wallet-adapter-base':
         specifier: ^0.9.23
         version: 0.9.27(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))
@@ -34,6 +40,12 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      vector-sdk:
+        specifier: link:../solutions/vector/ts/.vendor/vector
+        version: link:../solutions/vector/ts/.vendor/vector
+      vector-web3js-v3:
+        specifier: npm:@solana/web3.js@3.0.0-rc.0
+        version: '@solana/web3.js@3.0.0-rc.0(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@6.0.6)'
     devDependencies:
       '@types/node':
         specifier: ^20.14.2
@@ -5327,7 +5339,7 @@ snapshots:
 
   '@scure/bip32@1.7.0':
     dependencies:
-      '@noble/curves': 1.9.1
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
 
@@ -6206,10 +6218,26 @@ snapshots:
     transitivePeerDependencies:
       - fastestsmallesttextencoderdecoder
 
+  '@solana/spl-token-group@0.0.7(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)':
+    dependencies:
+      '@solana/codecs': 2.0.0-rc.1(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)
+      '@solana/web3.js': 1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)
+    transitivePeerDependencies:
+      - fastestsmallesttextencoderdecoder
+      - typescript
+
   '@solana/spl-token-group@0.0.7(@solana/web3.js@3.0.0-rc.0(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@6.0.6))(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)':
     dependencies:
       '@solana/codecs': 2.0.0-rc.1(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)
       '@solana/web3.js': 3.0.0-rc.0(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@6.0.6)
+    transitivePeerDependencies:
+      - fastestsmallesttextencoderdecoder
+      - typescript
+
+  '@solana/spl-token-metadata@0.1.6(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)':
+    dependencies:
+      '@solana/codecs': 2.0.0-rc.1(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)
+      '@solana/web3.js': 1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)
     transitivePeerDependencies:
       - fastestsmallesttextencoderdecoder
       - typescript
@@ -6221,6 +6249,21 @@ snapshots:
     transitivePeerDependencies:
       - fastestsmallesttextencoderdecoder
       - typescript
+
+  '@solana/spl-token@0.4.15(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@6.0.6)':
+    dependencies:
+      '@solana/buffer-layout': 4.0.1
+      '@solana/buffer-layout-utils': 0.3.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)
+      '@solana/spl-token-group': 0.0.7(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)
+      '@solana/spl-token-metadata': 0.1.6(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)
+      '@solana/web3.js': 1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)
+      buffer: 6.0.3
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - fastestsmallesttextencoderdecoder
+      - typescript
+      - utf-8-validate
 
   '@solana/spl-token@0.4.15(@solana/web3.js@3.0.0-rc.0(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@6.0.6))(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@6.0.6)':
     dependencies:
@@ -9435,7 +9478,7 @@ snapshots:
   ox@0.6.7(typescript@5.9.3)(zod@3.22.4):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
-      '@noble/curves': 1.8.1
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
