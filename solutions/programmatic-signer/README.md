@@ -3,8 +3,8 @@
 [Ed25519 Programmatic Signer](https://www.solana-program.com/docs/programmatic-signer) is Anza's
 offline-signing system for Solana, developed in
 [solana-program/ed25519-programmatic-signer](https://github.com/solana-program/ed25519-programmatic-signer).
-It is three cooperating Pinocchio programs, all deployed on devnet at their canonical addresses and
-not yet on mainnet-beta:
+It is three cooperating Pinocchio programs with canonical addresses on devnet and nothing on
+mainnet-beta yet:
 
 | Program | Address | Role |
 |---|---|---|
@@ -14,7 +14,8 @@ not yet on mainnet-beta:
 
 Status as of 2026-10-01: the README says "under construction", the docs say audits come before v1
 and any mainnet deployment, and interfaces are still being renamed (latest commit `e3c948d`,
-2026-09-29). Everything here is pinned to that commit.
+2026-09-29). Everything here is pinned to that commit. The devnet deployment is older (2026-09-22)
+and still uses legacy messages, so it rejects what `e3c948d` clients sign. See [`ts/`](ts/).
 
 ## How it works
 
@@ -85,8 +86,11 @@ authority instead of one identity per lane.
 cd rust && cargo test
 ```
 
+`ts/` holds numbered scripts `01` through `09` built on the upstream JS client (vendored, since it
+is not on npm). They pass against a local validator running the same ELFs and should run on devnet once
+it carries a v1 build. Details are in [`ts/README.md`](ts/README.md).
+
 ## Next
 
-- `ts/`: numbered devnet scripts `01` through `09` against the canonical devnet deployment.
 - Site: a `/programmatic-signer` track in `site-svelte` with the same nine requirement pages and live
-  demos.
+  demos. The live demos need a devnet deployment that speaks v1 messages.
