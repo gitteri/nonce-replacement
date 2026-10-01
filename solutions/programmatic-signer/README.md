@@ -65,7 +65,7 @@ Instruction set, all with a one-byte discriminator:
 | 2 | Concurrency | One authority controls any number of nonce accounts, one per concurrent transaction, all under the same PDA. Ordered batches can also be pre-signed as a chain on a single nonce account. | Full |
 | 3 | Fee-payer separation | Submit takes no signers from the cold key's side. The relayer signs and pays, and its key is not part of the signed bytes unless deliberately referenced in the payload. | Full |
 | 4 | Transaction integrity | The signature covers the full serialized authorization message, which embeds every payload instruction and account. The relayer can add its own top-level instructions around Submit, but those never get the PDA's signer privilege. | Full |
-| 5 | Selective revocation | Sign an Execute with an empty payload at the outstanding nonce. Landing it advances that nonce account with a different commitment and orphans whatever was signed against it. Other nonce accounts are untouched. Not yet proven here, see Next. | Full (per nonce account) |
+| 5 | Selective revocation | Sign an Execute with an empty payload at the outstanding nonce. Landing it advances that nonce account with a different commitment and orphans whatever was signed against it. Other nonce accounts are untouched. | Full (per nonce account) |
 | 6 | No onchain footprint at sign time | Signing is an offline computation over the nonce value, which is predictable after the account is created. Nothing touches chain state until Submit lands. | Full |
 | 7 | Transaction parsability | The payload is a standard v1 Solana message nested inside Submit instruction data, so a policy engine has to decode two message layers before it sees the user's instructions. The CLI ships `transaction decode` for this. | Partial: standard format, but wrapped |
 | 8 | State change tolerance | Submit, Execute, the nonce advance and every payload CPI run inside one Solana transaction. Any failure reverts all of it, nonce included. | Full |
@@ -76,10 +76,17 @@ buffer and keeps one outstanding transaction per identity. Programmatic Signer s
 message, which frees the relayer to wrap it, and gets concurrency from many nonce accounts per
 authority instead of one identity per lane.
 
+## Tests
+
+`rust/` holds mollusk-svm tests, one file per requirement, run against the three program ELFs in
+`rust/fixtures/` (built with `cargo build-sbf` at upstream `e3c948d`).
+
+```
+cd rust && cargo test
+```
+
 ## Next
 
-- `rust/`: mollusk-svm tests against the three program ELFs built at `e3c948d`, one file per
-  requirement, matching `solutions/vector/rust/tests`.
 - `ts/`: numbered devnet scripts `01` through `09` against the canonical devnet deployment.
 - Site: a `/programmatic-signer` track in `site-svelte` with the same nine requirement pages and live
   demos.
