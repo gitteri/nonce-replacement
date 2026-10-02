@@ -6,6 +6,7 @@
       "name": "artifact-app",
       "dependencies": {
         "@noble/curves": "^1.8.0",
+        "@noble/hashes": "^1.8.0",
         "@solana-program/loader-v3": "^0.7.0",
         "@solana-program/system": "^0.15.0",
         "@solana/kit": "^8.4.0",

@@ -12,4 +12,4 @@ export const PROGRAM_IDS: ProgramIds = {
 
 export { toV1Instruction } from "./bridge";
 export { fetchStoredNonce, missingPrograms, setupSigner, type SignerSetup } from "./chain";
-export { presign, type ColdKey, type Presigned, type ProgramIds } from "./signer";
+export { nextNonce, presign, type ColdKey, type Presigned, type ProgramIds } from "./signer";

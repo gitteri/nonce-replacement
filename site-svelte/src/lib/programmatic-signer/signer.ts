@@ -2,6 +2,7 @@
 // layout and signing, with the cold key held as raw bytes and signed with noble instead of
 // a WebCrypto key, and program ids passed in rather than read from process.env.
 import { ed25519 } from "@noble/curves/ed25519.js";
+import { sha256 } from "@noble/hashes/sha2.js";
 import {
   AccountRole,
   appendTransactionMessageInstructions,
@@ -9,6 +10,7 @@ import {
   createNoopSigner,
   createTransactionMessage,
   getAddressDecoder,
+  getAddressEncoder,
   getCompiledTransactionMessageEncoder,
   pipe,
   setTransactionMessageFeePayer,
@@ -31,8 +33,10 @@ export type ProgramIds = { signer: Address; executor: Address; nonce: Address };
 
 export type ColdKey = { address: Address; secretKey: Uint8Array };
 
+const NONCE_STEP_TAG = new TextEncoder().encode("spl-nonce::step::v1");
 const ZERO_LIFETIME = "11111111111111111111111111111111" as Blockhash;
 const messageEncoder = getCompiledTransactionMessageEncoder();
+const addressEncoder = getAddressEncoder();
 const addressDecoder = getAddressDecoder();
 const nonceDecoder = getNonceDecoder();
 
@@ -154,6 +158,24 @@ export async function presign(
     { programAddress: ids.signer }
   );
   return { submit, executionMessage, authorizationMessage, signature };
+}
+
+/** The nonce `nonceAccount` stores after landing `executionMessage` at `current`. */
+export function nextNonce(
+  ids: ProgramIds,
+  nonceAccount: Address,
+  current: Address,
+  executionMessage: ReadonlyUint8Array
+): Address {
+  const next = sha256
+    .create()
+    .update(NONCE_STEP_TAG)
+    .update(addressEncoder.encode(ids.nonce) as Uint8Array)
+    .update(addressEncoder.encode(nonceAccount) as Uint8Array)
+    .update(addressEncoder.encode(current) as Uint8Array)
+    .update(sha256(executionMessage as Uint8Array))
+    .digest();
+  return addressDecoder.decode(next);
 }
 
 export function initializeNonceInstruction(

@@ -93,6 +93,8 @@ that build's devnet ids. Details are in [`ts/README.md`](ts/README.md).
 
 ## Next
 
-- Site: `site-svelte` has a `/programmatic-signer` track with the nine requirement pages. Time window
-  and selective revocation have live demos (`site-svelte/src/lib/programmatic-signer`), which show a
-  notice until this repo's programs are on devnet. The other seven demos are still to come.
+- Site: `site-svelte` has a `/programmatic-signer` track with the nine requirement pages. Time window,
+  concurrency, fee-payer separation, selective revocation and state change tolerance have live demos
+  (`site-svelte/src/lib/programmatic-signer`), which show a notice until this repo's programs are on
+  devnet. Transaction integrity, no on-chain footprint, parsability and composability are still to
+  come.
