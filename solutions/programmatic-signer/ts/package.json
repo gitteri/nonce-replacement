@@ -8,7 +8,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "test": "tsx --test test/*.test.ts",
+    "test": "PS_SIGNER_PROGRAM_ID=EdSigVfK1DkeMrjFNDMjwfQaJPhPTtX7jW8uPv3oKEgN PS_EXECUTOR_PROGRAM_ID=ExecxgyHYsAXB4c5dZodV1zJZ9hqfsDCYkRDRATrpkFR PS_NONCE_PROGRAM_ID=Noncediea1fH12usShuQAz28UhgAeuE5Maf32LsMUQB tsx --test test/*.test.ts",
     "typecheck": "tsc -p .",
     "01": "tsx scripts/01-time-window.ts",
     "02": "tsx scripts/02-concurrency.ts",

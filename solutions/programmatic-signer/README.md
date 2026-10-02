@@ -14,8 +14,9 @@ mainnet-beta yet:
 
 Status as of 2026-10-01: the README says "under construction", the docs say audits come before v1
 and any mainnet deployment, and interfaces are still being renamed (latest commit `e3c948d`,
-2026-09-29). Everything here is pinned to that commit. The devnet deployment is older (2026-09-22)
-and still uses legacy messages, so it rejects what `e3c948d` clients sign. See [`ts/`](ts/).
+2026-09-29). Everything here is pinned to that commit. The canonical devnet deployment is older
+(2026-09-22) and still uses legacy messages, so it rejects what `e3c948d` clients sign. The scripts
+use this repo's own `e3c948d` deployment instead, as Vector's do. See [`ts/`](ts/).
 
 ## How it works
 
@@ -87,10 +88,10 @@ cd rust && cargo test
 ```
 
 `ts/` holds numbered scripts `01` through `09` built on the upstream JS client (vendored, since it
-is not on npm). They pass against a local validator running the same ELFs and should run on devnet once
-it carries a v1 build. Details are in [`ts/README.md`](ts/README.md).
+is not on npm). They pass against a local validator with this repo's own build deployed, and target
+that build's devnet ids. Details are in [`ts/README.md`](ts/README.md).
 
 ## Next
 
 - Site: a `/programmatic-signer` track in `site-svelte` with the same nine requirement pages and live
-  demos. The live demos need a devnet deployment that speaks v1 messages.
+  demos, against this repo's devnet deployment.

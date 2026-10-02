@@ -27,7 +27,7 @@ import {
 import { devnetRpc } from "../lib/connection.js";
 import { ensureFunded, loadFunderKeypair, loadOrGenerateKeypair } from "../lib/keypair.js";
 import { logTx, section } from "../lib/format.js";
-import { MESSAGE_EXECUTOR_PROGRAM_ADDRESS, fetchStoredNonce, presign } from "../lib/programmaticSigner.js";
+import { EXECUTOR_PROGRAM, fetchStoredNonce, presign } from "../lib/programmaticSigner.js";
 import { sendTx } from "../lib/sendTx.js";
 import { setupSigner } from "../lib/setup.js";
 import {
@@ -77,7 +77,7 @@ async function main() {
   const [header] = authorization.instructionHeaders;
   const [payload] = authorization.instructionPayloads;
   const program = authorization.staticAccounts[header.programAccountIndex];
-  console.log(`one instruction, to ${program === MESSAGE_EXECUTOR_PROGRAM_ADDRESS ? "the Message Executor" : program}`);
+  console.log(`one instruction, to ${program === EXECUTOR_PROGRAM ? "the Message Executor" : program}`);
 
   section("Layer 3: execution message");
   const { message: executionBytes } = getExecuteInstructionDataDecoder().decode(payload.instructionData);
