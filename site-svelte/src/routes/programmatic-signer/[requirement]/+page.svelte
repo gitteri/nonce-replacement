@@ -6,6 +6,8 @@
 	import FeePayerSeparationDemo from '$lib/components/demo/programmatic-signer/FeePayerSeparationDemo.svelte';
 	import SelectiveRevocationDemo from '$lib/components/demo/programmatic-signer/SelectiveRevocationDemo.svelte';
 	import StateChangeToleranceDemo from '$lib/components/demo/programmatic-signer/StateChangeToleranceDemo.svelte';
+	import TransactionIntegrityDemo from '$lib/components/demo/programmatic-signer/TransactionIntegrityDemo.svelte';
+	import NoOnchainFootprintDemo from '$lib/components/demo/programmatic-signer/NoOnchainFootprintDemo.svelte';
 	import { programmaticSigner } from '$lib/content/solutions';
 	import type { PageData } from './$types';
 
@@ -15,7 +17,9 @@
 		'time-window': TimeWindowDemo,
 		concurrency: ConcurrencyDemo,
 		'fee-payer-separation': FeePayerSeparationDemo,
+		'transaction-integrity': TransactionIntegrityDemo,
 		'selective-revocation': SelectiveRevocationDemo,
+		'no-onchain-footprint': NoOnchainFootprintDemo,
 		'state-change-tolerance': StateChangeToleranceDemo
 	};
 </script>
