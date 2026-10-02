@@ -30,9 +30,6 @@ import {
 import { getCreateAccountInstruction } from "@solana-program/system";
 import { createHash } from "node:crypto";
 import {
-  ED25519_SIGNER_PROGRAM_ADDRESS,
-  MESSAGE_EXECUTOR_PROGRAM_ADDRESS,
-  NONCE_PROGRAM_ADDRESS,
   fetchNonce,
   findProgrammaticSignerPda,
   getExecuteInstruction,
@@ -40,8 +37,9 @@ import {
   getNonceDecoder,
   getSubmitInstruction,
 } from "../vendor/ed25519-programmatic-signer/src/index.js";
+import { EXECUTOR_PROGRAM, NONCE_PROGRAM, SIGNER_PROGRAM } from "./programs.js";
 
-export { ED25519_SIGNER_PROGRAM_ADDRESS, MESSAGE_EXECUTOR_PROGRAM_ADDRESS, NONCE_PROGRAM_ADDRESS };
+export { EXECUTOR_PROGRAM, NONCE_PROGRAM, SIGNER_PROGRAM };
 
 const NONCE_STEP_TAG = new TextEncoder().encode("spl-nonce::step::v1");
 const ZERO_LIFETIME = "11111111111111111111111111111111" as Blockhash;
@@ -55,7 +53,7 @@ export type ColdKey = {
 };
 
 export async function programmaticSigner(cold: Address): Promise<Address> {
-  const [pda] = await findProgrammaticSignerPda({ authority: cold });
+  const [pda] = await findProgrammaticSignerPda({ authority: cold }, { programAddress: SIGNER_PROGRAM });
   return pda;
 }
 
@@ -148,14 +146,21 @@ export async function presign(
 ): Promise<Presigned> {
   const pda = await programmaticSigner(cold.address);
   const executionMessage = compileExecutionMessage(pda, nonce, payload);
-  const executorIx = getExecuteInstruction({
-    message: executionMessage,
-    nonceAccount,
-    nonceAuthority: createNoopSigner(pda),
-  });
+  const executorIx = getExecuteInstruction(
+    {
+      message: executionMessage,
+      nonceAccount,
+      nonceAuthority: createNoopSigner(pda),
+      nonceProgram: NONCE_PROGRAM,
+    },
+    { programAddress: EXECUTOR_PROGRAM }
+  );
   const authorizationMessage = compileAuthorizationMessage(cold.address, executorIx);
   const signature = await signBytes(cold.keyPair.privateKey, authorizationMessage);
-  const submit = getSubmitInstruction({ signatures: [signature], message: authorizationMessage });
+  const submit = getSubmitInstruction(
+    { signatures: [signature], message: authorizationMessage },
+    { programAddress: SIGNER_PROGRAM }
+  );
   return { submit, executionMessage, authorizationMessage, signature };
 }
 
@@ -173,7 +178,7 @@ export function nextNonce(
 ): Address {
   const next = sha256(
     NONCE_STEP_TAG,
-    addressEncoder.encode(NONCE_PROGRAM_ADDRESS),
+    addressEncoder.encode(NONCE_PROGRAM),
     addressEncoder.encode(nonceAccount),
     addressEncoder.encode(current),
     sha256(executionMessage)
@@ -196,9 +201,12 @@ export async function createNonceAccountInstructions(
       newAccount: nonceAccount,
       lamports: rent,
       space,
-      programAddress: NONCE_PROGRAM_ADDRESS,
+      programAddress: NONCE_PROGRAM,
     }),
-    getInitializeInstruction({ nonceAccount: nonceAccount.address, authority }),
+    getInitializeInstruction(
+      { nonceAccount: nonceAccount.address, authority },
+      { programAddress: NONCE_PROGRAM }
+    ),
   ];
 }
 

@@ -7,16 +7,45 @@ Solana Explorer links.
 
 ## Status
 
-All 9 scripts pass against a local `solana-test-validator` (Agave 4.2.1) running the three programs
-built at upstream `e3c948d`, the same ELFs as `../rust/fixtures`. `pnpm test` checks the signing path
-offline: for a fixed key, nonce and payload, the Submit instruction, execution message and next nonce
-match the Rust client's `presign` byte for byte.
+All 9 scripts pass against a local `solana-test-validator` (Agave 4.2.1) with the three programs in
+`.vendor/` deployed through `solana program deploy`, the same path a devnet deploy takes. `pnpm test`
+checks the signing path offline: for a fixed key, nonce and payload, the Submit instruction, execution
+message and next nonce match the Rust client's `presign` byte for byte.
 
-They do not run on devnet yet. The programs at the canonical devnet addresses were deployed on
-2026-09-22 (slots 502526991 to 502529229), before upstream moved the execution and authorization
-messages from legacy to v1 (2026-09-25 to 09-29). The devnet Executor still parses a legacy message,
-so a v1 Submit gets past the Signer's signature check and then panics in the Executor. They should run
-unchanged once Anza redeploys a v1 build.
+They target this repo's own devnet deployment, which is not live yet (see below). The programs at the
+canonical devnet addresses were deployed on 2026-09-22, before upstream moved the execution and
+authorization messages from legacy to v1 (2026-09-25 to 09-29), so a v1 Submit passes the Signer's
+signature check there and then panics in the Executor.
+
+## Devnet deployment
+
+Like Vector, this repo deploys its own copy. `.vendor/` holds the three programs built at upstream
+`e3c948d` with only the `declare_id!` in each interface crate (and the Executor's default nonce program)
+changed to these ids:
+
+| Program  | Id                                             |
+| -------- | ---------------------------------------------- |
+| Signer   | `986H9i8wxYrDsUHtEUR9eNN2tA3Y5xgQDGsfRnhVmgzX` |
+| Executor | `4NPokYh4xsQqs3dnwcJvuLPkuZCFj7x4QVQBChv8SDiQ` |
+| Nonce    | `3nK4iiSeW7Mkx4GRxDXWWEw5H6ZPLG5yETB7JcZTdP5o` |
+
+`lib/programs.ts` defaults to them. Set `PS_SIGNER_PROGRAM_ID`, `PS_EXECUTOR_PROGRAM_ID` and
+`PS_NONCE_PROGRAM_ID` to target another deployment. To rebuild, replace the canonical ids in
+`signer/interface/src/lib.rs`, `executor/interface/src/lib.rs`, `executor/interface/src/instruction.rs`
+and `nonce/interface/src/lib.rs`, then run `cargo build-sbf` in each `*/program`.
+
+Deploying all three costs about 1.89 SOL, paid by the CLI identity, which also becomes the upgrade
+authority:
+
+```
+solana program deploy -u devnet --program-id .devnet/nonce-program.keypair.json .vendor/spl_nonce_program.so
+solana program deploy -u devnet --program-id .devnet/executor-program.keypair.json .vendor/spl_message_executor_program.so
+solana program deploy -u devnet --program-id .devnet/signer-program.keypair.json .vendor/spl_ed25519_signer_program.so
+```
+
+The ELFs are SBPF v0. Devnet still accepts v0 deployments, but `solana-test-validator` 4.2 enables
+SIMD-0500 by default, which rejects them, so pass `--deactivate-feature
+B8JJXCy5amZyWG9r7EnUYLwzXSXTxG7GZ1qZ1qggo83g` to rehearse a deploy locally.
 
 ## Setup
 
@@ -42,18 +71,19 @@ Against a local validator:
 
 ```
 solana-test-validator --reset \
-  --bpf-program EdSigVfK1DkeMrjFNDMjwfQaJPhPTtX7jW8uPv3oKEgN ../rust/fixtures/spl_ed25519_signer_program.so \
-  --bpf-program ExecxgyHYsAXB4c5dZodV1zJZ9hqfsDCYkRDRATrpkFR ../rust/fixtures/spl_message_executor_program.so \
-  --bpf-program Noncediea1fH12usShuQAz28UhgAeuE5Maf32LsMUQB ../rust/fixtures/spl_nonce_program.so
+  --bpf-program 986H9i8wxYrDsUHtEUR9eNN2tA3Y5xgQDGsfRnhVmgzX .vendor/spl_ed25519_signer_program.so \
+  --bpf-program 4NPokYh4xsQqs3dnwcJvuLPkuZCFj7x4QVQBChv8SDiQ .vendor/spl_message_executor_program.so \
+  --bpf-program 3nK4iiSeW7Mkx4GRxDXWWEw5H6ZPLG5yETB7JcZTdP5o .vendor/spl_nonce_program.so
 
 # in another shell:
 export DEVNET_RPC_URL=http://127.0.0.1:8899
+export DEVNET_WS_URL=ws://127.0.0.1:8900
 export TIME_WINDOW_WAIT_SECONDS=5
 pnpm run 01   # ...through 09
 ```
 
-Against devnet (once it carries a v1 build), leave `DEVNET_RPC_URL` unset or point it at a private
-endpoint. `DEVNET_WS_URL` defaults to the RPC URL with `ws` in place of `http`.
+Against devnet, leave `DEVNET_RPC_URL` unset or point it at a private endpoint. `DEVNET_WS_URL`
+defaults to the RPC URL with `ws` in place of `http`.
 
 Each script generates and funds its relayer keypair under `.devnet/` (gitignored by
 `*.keypair.json`). Funding tries the faucet, then falls back to a transfer from
@@ -71,4 +101,5 @@ lib/                 devnet RPC, keypair funding, sendTx, Explorer links, and th
 scripts/01-09        one script per functional requirement
 test/                byte-for-byte parity with the Rust client
 vendor/              upstream Codama JS client at e3c948d
+.vendor/             the three programs at e3c948d, built with this repo's devnet ids
 ```
