@@ -24,10 +24,15 @@
 				Blueshift&apos;s hashchain-based offline-signing program. Live now.
 			</p>
 		</a>
-		<div class="rounded-lg border border-dashed border-neutral-300 p-5 text-neutral-400 dark:border-neutral-700">
-			<div class="font-medium">ed25519-programmatic-signer</div>
-			<p class="mt-1 text-sm">Anza&apos;s in-development program. Coming soon.</p>
-		</div>
+		<a
+			href="{base}/programmatic-signer"
+			class="rounded-lg border border-neutral-200 p-5 transition-colors hover:border-neutral-400 dark:border-neutral-800 dark:hover:border-neutral-600"
+		>
+			<div class="font-medium">Ed25519 Programmatic Signer</div>
+			<p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+				Anza&apos;s in-development offline-signing program. Requirement pages now, live demos soon.
+			</p>
+		</a>
 	</div>
 
 	<p class="mt-10 text-sm text-neutral-500">

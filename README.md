@@ -17,9 +17,10 @@ website proving, requirement by requirement, how each candidate solution measure
 - **[Vector](solutions/vector/)** (live) — [Blueshift's](https://github.com/blueshift-gg/vector)
   hashchain-based offline-signing program. Deterministic Rust tests, devnet TypeScript examples,
   and a requirement-by-requirement mapping live in `solutions/vector/`.
-- **ed25519-programmatic-signer** (coming soon) — Anza's in-development
-  [programmatic signer program](https://github.com/solana-program/ed25519-programmatic-signer/pull/12),
-  as a second comparison track.
+- **[Ed25519 Programmatic Signer](solutions/programmatic-signer/)** — Anza's in-development
+  [offline-signing program](https://github.com/solana-program/ed25519-programmatic-signer). Rust
+  tests, TypeScript scripts and the requirement mapping live in `solutions/programmatic-signer/`.
+  The site track has its requirement pages; live demos wait on this repo's devnet deployment.
 
 ## Site
 

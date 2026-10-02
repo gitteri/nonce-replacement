@@ -93,5 +93,5 @@ that build's devnet ids. Details are in [`ts/README.md`](ts/README.md).
 
 ## Next
 
-- Site: a `/programmatic-signer` track in `site-svelte` with the same nine requirement pages and live
-  demos, against this repo's devnet deployment.
+- Site: `site-svelte` has a `/programmatic-signer` track with the nine requirement pages. Live demos
+  come after this repo's programs are deployed to devnet.
