@@ -1,31 +1,12 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { requirements } from '$lib/content/requirements';
+	import { durableNonceSteps } from '$lib/content/durableNonceSteps';
+	import { vector } from '$lib/content/solutions';
 	import RequirementCard from '$lib/components/RequirementCard.svelte';
 	import StepThrough, { type Step } from '$lib/components/StepThrough.svelte';
 
 	const steps: Step[] = [
-		{
-			phase: 'mechanism',
-			title: 'A durable nonce is a placeholder, nothing more',
-			body: "It sits between the signing authority and whatever it authorizes: a predictable value anyone watching the chain can already see.",
-			boxes: [
-				{ label: 'Signing authority', variant: 'neutral' },
-				{ label: 'Durable nonce account', detail: 'predictable, shared counter', variant: 'neutral' },
-				{ label: 'Funds & authorities', variant: 'neutral' }
-			]
-		},
-		{
-			phase: 'mechanism',
-			title: 'The same nonce can back two different transactions',
-			body: "The nonce doesn't bind to what it's paired with beyond the signature itself. Sign two different transactions against it and both are valid. Whichever lands first wins.",
-			boxes: [
-				{ label: 'Durable nonce account', variant: 'neutral' },
-				{ label: 'Transaction A', variant: 'warning' },
-				{ label: 'Transaction B', variant: 'warning' }
-			],
-			note: 'The substitution risk.'
-		},
+		...durableNonceSteps,
 		{
 			phase: 'mechanism',
 			title: "Vector's signature covers the instructions themselves",
@@ -113,8 +94,8 @@
 
 	<h2 class="mt-10 text-lg font-medium">Requirements</h2>
 	<div class="mt-4 grid gap-3 sm:grid-cols-2">
-		{#each requirements as r (r.slug)}
-			<RequirementCard requirement={r} />
+		{#each vector.requirements as r (r.slug)}
+			<RequirementCard solution={vector} requirement={r} />
 		{/each}
 	</div>
 </main>

@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { requirements } from '$lib/content/requirements';
+	import type { Solution } from '$lib/content/solutions';
 
-	let { activeSlug }: { activeSlug?: string } = $props();
+	let { solution, activeSlug }: { solution: Solution; activeSlug?: string } = $props();
 </script>
 
 <nav class="space-y-1">
-	{#each requirements as r (r.slug)}
+	{#each solution.requirements as r (r.slug)}
 		<a
-			href="{base}/vector/{r.slug}"
+			href="{base}/{solution.slug}/{r.slug}"
 			class="flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm transition-colors {r.slug ===
 			activeSlug
 				? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900'

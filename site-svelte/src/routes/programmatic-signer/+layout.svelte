@@ -1,10 +1,10 @@
 <script lang="ts">
 	import SolutionLayout from '$lib/components/SolutionLayout.svelte';
-	import { vector } from '$lib/content/solutions';
+	import { programmaticSigner } from '$lib/content/solutions';
 
 	let { children } = $props();
 </script>
 
-<SolutionLayout solution={vector}>
+<SolutionLayout solution={programmaticSigner}>
 	{@render children()}
 </SolutionLayout>
