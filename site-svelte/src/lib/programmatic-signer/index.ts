@@ -10,6 +10,7 @@ export const PROGRAM_IDS: ProgramIds = {
   nonce: address(env.PUBLIC_PS_NONCE_PROGRAM_ID ?? "3nK4iiSeW7Mkx4GRxDXWWEw5H6ZPLG5yETB7JcZTdP5o"),
 };
 
-export { toV1Instruction } from "./bridge";
+export { fromV1Instruction, toV1Instruction } from "./bridge";
 export { fetchStoredNonce, missingPrograms, setupSigner, type SignerSetup } from "./chain";
+export { decodeSubmit, type DecodedSubmit } from "./parse";
 export { nextNonce, presign, type ColdKey, type Presigned, type ProgramIds } from "./signer";
