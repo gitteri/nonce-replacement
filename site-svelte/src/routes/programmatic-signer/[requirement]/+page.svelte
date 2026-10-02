@@ -8,6 +8,8 @@
 	import StateChangeToleranceDemo from '$lib/components/demo/programmatic-signer/StateChangeToleranceDemo.svelte';
 	import TransactionIntegrityDemo from '$lib/components/demo/programmatic-signer/TransactionIntegrityDemo.svelte';
 	import NoOnchainFootprintDemo from '$lib/components/demo/programmatic-signer/NoOnchainFootprintDemo.svelte';
+	import ParsabilityDemo from '$lib/components/demo/programmatic-signer/ParsabilityDemo.svelte';
+	import ComposabilityDemo from '$lib/components/demo/programmatic-signer/ComposabilityDemo.svelte';
 	import { programmaticSigner } from '$lib/content/solutions';
 	import type { PageData } from './$types';
 
@@ -20,7 +22,9 @@
 		'transaction-integrity': TransactionIntegrityDemo,
 		'selective-revocation': SelectiveRevocationDemo,
 		'no-onchain-footprint': NoOnchainFootprintDemo,
-		'state-change-tolerance': StateChangeToleranceDemo
+		parsability: ParsabilityDemo,
+		'state-change-tolerance': StateChangeToleranceDemo,
+		composability: ComposabilityDemo
 	};
 </script>
 
