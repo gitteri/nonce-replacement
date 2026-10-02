@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+
+:root {
+	color-scheme: light dark;
+	/* Single accent color for the live-demo flow diagram and card watermarks — matches
+	   the existing "full fit" green so it reads as "this is working," not a new brand color. */
+	--accent: #22c55e;
+}
+
+body {
+	@apply bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100;
+}
+
+/* Connector bar between flow-diagram nodes drawing in left to right as a step lands. */
+@keyframes grow-x {
+	from {
+		transform: scaleX(0);
+	}
+	to {
+		transform: scaleX(1);
+	}
+}
+
+/* Moving gradient sweep across the active/in-flight flow-diagram node. */
+@keyframes sweep {
+	0% {
+		background-position: -150% 0;
+	}
+	100% {
+		background-position: 250% 0;
+	}
+}
+
+/* Settle bounce on flow-diagram nodes when a demo run completes. */
+@keyframes pop-in {
+	0% {
+		transform: scale(1);
+	}
+	40% {
+		transform: scale(1.15);
+	}
+	70% {
+		transform: scale(0.95);
+	}
+	100% {
+		transform: scale(1);
+	}
+}

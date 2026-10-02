@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getRequirement, requirements } from "@/content/requirements";
 import { FitBadge } from "@/components/FitBadge";
 import { CodeBlock } from "@/components/CodeBlock";
+import { TimeWindowDemo } from "@/components/TimeWindowDemo";
 
 export function generateStaticParams() {
   return requirements.map((r) => ({ requirement: r.slug }));
@@ -45,13 +46,19 @@ export default function RequirementPage({ params }: { params: { requirement: str
         <h2 className="text-sm font-medium uppercase tracking-wide text-neutral-500">
           Live demo
         </h2>
-        <div className="mt-2 rounded-lg border border-dashed border-neutral-300 p-6 text-sm text-neutral-500 dark:border-neutral-700">
-          Live devnet demo coming soon &mdash; see{" "}
-          <code className="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-900">
-            solutions/vector/ts/scripts/{requirement.scriptFile}
-          </code>{" "}
-          for the runnable version of this demo today.
-        </div>
+        {requirement.slug === "time-window" ? (
+          <div className="mt-2">
+            <TimeWindowDemo />
+          </div>
+        ) : (
+          <div className="mt-2 rounded-lg border border-dashed border-neutral-300 p-6 text-sm text-neutral-500 dark:border-neutral-700">
+            Live devnet demo coming soon &mdash; see{" "}
+            <code className="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-900">
+              solutions/vector/ts/scripts/{requirement.scriptFile}
+            </code>{" "}
+            for the runnable version of this demo today.
+          </div>
+        )}
       </section>
 
       <section className="mt-8">
