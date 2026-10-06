@@ -12,7 +12,7 @@ import { devnetRpc } from "../lib/connection.js";
 import { ensureFunded, loadFunderKeypair, loadOrGenerateKeypair } from "../lib/keypair.js";
 import { firstLine, logTx, section } from "../lib/format.js";
 import { fetchStoredNonce, presign } from "../lib/programmaticSigner.js";
-import { sendTx } from "../lib/sendTx.js";
+import { assertRejectedOnchain, sendTx } from "../lib/sendTx.js";
 import { setupSigner } from "../lib/setup.js";
 
 async function main() {
@@ -40,6 +40,7 @@ async function main() {
     console.log("UNEXPECTED: overdrawing payload landed");
     process.exit(1);
   } catch (err) {
+    assertRejectedOnchain(err);
     console.log(`failed: ${firstLine(err)}`);
   }
   const unchanged = (await fetchStoredNonce(devnet.rpc, nonceAccount)) === nonce;

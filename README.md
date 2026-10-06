@@ -20,8 +20,8 @@ website proving, requirement by requirement, how each candidate solution measure
 - **[Ed25519 Programmatic Signer](solutions/programmatic-signer/)** — Anza's in-development
   [offline-signing program](https://github.com/solana-program/ed25519-programmatic-signer). Rust
   tests, TypeScript scripts and the requirement mapping live in `solutions/programmatic-signer/`.
-  The site track has its requirement pages and the first live demos, which run once this repo's
-  devnet deployment lands.
+  The site track has its nine requirement pages, each with a live demo against this repo's devnet
+  deployment.
 
 ## Site
 

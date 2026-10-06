@@ -88,11 +88,10 @@ cd rust && cargo test
 ```
 
 `ts/` holds numbered scripts `01` through `09` built on the upstream JS client (vendored, since it
-is not on npm). They pass against a local validator with this repo's own build deployed, and target
-that build's devnet ids. Details are in [`ts/README.md`](ts/README.md).
+is not on npm). They pass on devnet against this repo's own build and against a local validator.
+Details are in [`ts/README.md`](ts/README.md).
 
 ## Next
 
 - Site: `site-svelte` has a `/programmatic-signer` track with the nine requirement pages, each with a
-  live demo (`site-svelte/src/lib/programmatic-signer`). They show a notice until this repo's programs
-  are on devnet.
+  live demo (`site-svelte/src/lib/programmatic-signer`) against this repo's devnet programs.
