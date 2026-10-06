@@ -12,7 +12,7 @@ import { devnetRpc } from "../lib/connection.js";
 import { ensureFunded, loadFunderKeypair, loadOrGenerateKeypair } from "../lib/keypair.js";
 import { firstLine, logTx, section } from "../lib/format.js";
 import { fetchStoredNonce, presign } from "../lib/programmaticSigner.js";
-import { sendTx } from "../lib/sendTx.js";
+import { assertRejectedOnchain, sendTx } from "../lib/sendTx.js";
 import { setupSigner } from "../lib/setup.js";
 
 const AMOUNT = 1_000n;
@@ -64,6 +64,7 @@ async function main() {
       console.log("UNEXPECTED: tampered transaction landed");
       process.exit(1);
     } catch (err) {
+      assertRejectedOnchain(err);
       console.log(`rejected: ${firstLine(err)}`);
     }
   }

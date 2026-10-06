@@ -7,12 +7,12 @@ Solana Explorer links.
 
 ## Status
 
-All 9 scripts pass against a local `solana-test-validator` (Agave 4.2.1) with the three programs in
-`.vendor/` deployed through `solana program deploy`, the same path a devnet deploy takes. `pnpm test`
+All 9 scripts pass on devnet (2026-10-06) and against a local `solana-test-validator` (Agave 4.2.1)
+with the three programs in `.vendor/` deployed through `solana program deploy`. `pnpm test`
 checks the signing path offline: for a fixed key, nonce and payload, the Submit instruction, execution
 message and next nonce match the Rust client's `presign` byte for byte.
 
-They target this repo's own devnet deployment, which is not live yet (see below). The programs at the
+They target this repo's own devnet deployment (see below). The programs at the
 canonical devnet addresses were deployed on 2026-09-22, before upstream moved the execution and
 authorization messages from legacy to v1 (2026-09-25 to 09-29), so a v1 Submit passes the Signer's
 signature check there and then panics in the Executor.
@@ -34,8 +34,10 @@ changed to these ids:
 `signer/interface/src/lib.rs`, `executor/interface/src/lib.rs`, `executor/interface/src/instruction.rs`
 and `nonce/interface/src/lib.rs`, then run `cargo build-sbf` in each `*/program`.
 
-Deploying all three costs about 1.89 SOL, paid by the CLI identity, which also becomes the upgrade
-authority:
+These went live on 2026-10-06 at slots 508239079 (Nonce), 508239165 (Executor) and 508239246
+(Signer), with upgrade authority `3C8eBmzGx4TzBMVBeL2jfDodG5dr55mmCJkcWv19J1nE`. The deployed bytes
+match `.vendor/`. Deploying all three costs about 1.4 SOL, paid by the CLI identity, which also
+becomes the upgrade authority:
 
 ```
 solana program deploy -u devnet --program-id .devnet/nonce-program.keypair.json .vendor/spl_nonce_program.so
