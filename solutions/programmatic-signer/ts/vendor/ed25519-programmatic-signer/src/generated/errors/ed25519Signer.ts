@@ -22,6 +22,7 @@ export const ED25519_SIGNER_ERROR__DISALLOWED_EXECUTOR_INSTRUCTION = 0x4; // 4
 export const ED25519_SIGNER_ERROR__INVALID_SIGNATURE_COUNT = 0x5; // 5
 export const ED25519_SIGNER_ERROR__UNSUPPORTED_MESSAGE_VERSION = 0x6; // 6
 export const ED25519_SIGNER_ERROR__UNSUPPORTED_TRANSACTION_CONFIG = 0x7; // 7
+export const ED25519_SIGNER_ERROR__MISSING_SIGNATURE = 0x8; // 8
 
 export type Ed25519SignerError =
     | typeof ED25519_SIGNER_ERROR__ACCOUNT_KEY_MISMATCH
@@ -30,6 +31,7 @@ export type Ed25519SignerError =
     | typeof ED25519_SIGNER_ERROR__INVALID_MESSAGE
     | typeof ED25519_SIGNER_ERROR__INVALID_SIGNATURE
     | typeof ED25519_SIGNER_ERROR__INVALID_SIGNATURE_COUNT
+    | typeof ED25519_SIGNER_ERROR__MISSING_SIGNATURE
     | typeof ED25519_SIGNER_ERROR__UNSUPPORTED_MESSAGE_VERSION
     | typeof ED25519_SIGNER_ERROR__UNSUPPORTED_TRANSACTION_CONFIG;
 
@@ -42,6 +44,7 @@ if (process.env['NODE_ENV'] !== 'production') {
         [ED25519_SIGNER_ERROR__INVALID_MESSAGE]: `The authorization message failed sanitization`,
         [ED25519_SIGNER_ERROR__INVALID_SIGNATURE]: `An authority signature failed verification against the authorization message`,
         [ED25519_SIGNER_ERROR__INVALID_SIGNATURE_COUNT]: `The authority signature count does not match the authorization message.`,
+        [ED25519_SIGNER_ERROR__MISSING_SIGNATURE]: `A signer required by the authorization message has no signature and does not sign the relay transaction`,
         [ED25519_SIGNER_ERROR__UNSUPPORTED_MESSAGE_VERSION]: `The authorization message is not a v1 message`,
         [ED25519_SIGNER_ERROR__UNSUPPORTED_TRANSACTION_CONFIG]: `The authorization message sets transaction config fields`,
     };

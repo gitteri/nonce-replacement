@@ -1,6 +1,6 @@
 /**
  * Offline signing for Ed25519 Programmatic Signer, built on the upstream Codama client vendored at
- * `e3c948d` (`vendor/ed25519-programmatic-signer`). The client ships instruction builders only, so
+ * `5a679d1` (`vendor/ed25519-programmatic-signer`). The client ships instruction builders only, so
  * this module adds what the Rust client's `presign` path does: compile the execution message,
  * wrap it in an authorization message, and sign that with the cold key.
  */

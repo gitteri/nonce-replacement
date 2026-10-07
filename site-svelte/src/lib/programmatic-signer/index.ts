@@ -1,13 +1,13 @@
-// Defaults are this repo's devnet deployment of the e3c948d build, matching
+// Defaults are Anza's canonical devnet programs, matching
 // solutions/programmatic-signer/ts/lib/programs.ts. PUBLIC_PS_* overrides all three.
 import { env } from "$env/dynamic/public";
 import { address } from "@solana/kit";
 import type { ProgramIds } from "./signer";
 
 export const PROGRAM_IDS: ProgramIds = {
-  signer: address(env.PUBLIC_PS_SIGNER_PROGRAM_ID ?? "986H9i8wxYrDsUHtEUR9eNN2tA3Y5xgQDGsfRnhVmgzX"),
-  executor: address(env.PUBLIC_PS_EXECUTOR_PROGRAM_ID ?? "4NPokYh4xsQqs3dnwcJvuLPkuZCFj7x4QVQBChv8SDiQ"),
-  nonce: address(env.PUBLIC_PS_NONCE_PROGRAM_ID ?? "3nK4iiSeW7Mkx4GRxDXWWEw5H6ZPLG5yETB7JcZTdP5o"),
+  signer: address(env.PUBLIC_PS_SIGNER_PROGRAM_ID ?? "EdSigVfK1DkeMrjFNDMjwfQaJPhPTtX7jW8uPv3oKEgN"),
+  executor: address(env.PUBLIC_PS_EXECUTOR_PROGRAM_ID ?? "ExecxgyHYsAXB4c5dZodV1zJZ9hqfsDCYkRDRATrpkFR"),
+  nonce: address(env.PUBLIC_PS_NONCE_PROGRAM_ID ?? "Noncediea1fH12usShuQAz28UhgAeuE5Maf32LsMUQB"),
 };
 
 export { fromV1Instruction, toV1Instruction } from "./bridge";

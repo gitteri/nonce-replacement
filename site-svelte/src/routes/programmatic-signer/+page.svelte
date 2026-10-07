@@ -96,8 +96,9 @@
 		Three programs split the work. The Signer verifies the Ed25519 signature and promotes the cold
 		key&apos;s PDA to signer, the Executor checks and advances the nonce then replays the signed
 		instructions, and the Nonce program stores a hashchain value per nonce account. Upstream is
-		pre-audit and has no mainnet deployment. Everything here is pinned to commit
-		<code class="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-900">e3c948d</code>.
+		pre-audit and has no mainnet deployment. The demos run against Anza&apos;s canonical devnet
+		programs, and the client code is pinned to commit
+		<code class="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-900">5a679d1</code>.
 	</p>
 
 	<StepThrough {steps} />

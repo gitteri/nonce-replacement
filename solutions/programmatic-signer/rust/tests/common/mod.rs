@@ -1,6 +1,6 @@
-//! Shared mollusk-svm helpers. The three programs run from ELFs built at
-//! upstream `e3c948d` (`fixtures/`, relative to this crate's root, which is
-//! the working directory `cargo test` uses).
+//! Shared mollusk-svm helpers. The three programs run from ELFs dumped from
+//! the canonical devnet deployment (`fixtures/`, relative to this crate's
+//! root, which is the working directory `cargo test` uses).
 
 #![allow(dead_code)]
 
