@@ -12,11 +12,10 @@ mainnet-beta yet:
 | Message Executor | `ExecxgyHYsAXB4c5dZodV1zJZ9hqfsDCYkRDRATrpkFR` | Checks and consumes the nonce, then replays the signed instructions |
 | Nonce | `Noncediea1fH12usShuQAz28UhgAeuE5Maf32LsMUQB` | Stores and advances nonce values |
 
-Status as of 2026-10-01: the README says "under construction", the docs say audits come before v1
-and any mainnet deployment, and interfaces are still being renamed (latest commit `e3c948d`,
-2026-09-29). Everything here is pinned to that commit. The canonical devnet deployment is older
-(2026-09-22) and still uses legacy messages, so it rejects what `e3c948d` clients sign. The scripts
-use this repo's own `e3c948d` deployment instead, as Vector's do. See [`ts/`](ts/).
+Status as of 2026-10-07: the README says "under construction", the docs say audits come before v1
+and any mainnet deployment, and interfaces are still changing. Anza upgraded the canonical devnet
+programs to the latest code and published their IDLs on 2026-10-07. Everything here is pinned to
+upstream `5a679d1` and runs against those canonical programs. See [`ts/`](ts/).
 
 ## How it works
 
@@ -81,14 +80,14 @@ authority instead of one identity per lane.
 ## Tests
 
 `rust/` holds mollusk-svm tests, one file per requirement, run against the three program ELFs in
-`rust/fixtures/` (built with `cargo build-sbf` at upstream `e3c948d`).
+`rust/fixtures/` (dumped from the canonical devnet programs with `solana program dump`).
 
 ```
 cd rust && cargo test
 ```
 
 `ts/` holds numbered scripts `01` through `09` built on the upstream JS client (vendored, since it
-is not on npm). They pass on devnet against this repo's own build and against a local validator.
+is not on npm). They pass on devnet against the canonical programs.
 Details are in [`ts/README.md`](ts/README.md).
 
 ## Next

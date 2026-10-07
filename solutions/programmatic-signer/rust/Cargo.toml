@@ -6,11 +6,11 @@ publish = false
 description = "mollusk-svm tests proving Ed25519 Programmatic Signer satisfies the nonce-account-replacement spec"
 
 [dev-dependencies]
-spl-ed25519-signer-client = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "e3c948d" }
-spl-ed25519-signer-interface = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "e3c948d" }
-spl-message-executor-client = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "e3c948d" }
-spl-message-executor-interface = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "e3c948d" }
-spl-nonce-interface = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "e3c948d" }
+spl-ed25519-signer-client = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "5a679d1" }
+spl-ed25519-signer-interface = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "5a679d1" }
+spl-message-executor-client = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "5a679d1" }
+spl-message-executor-interface = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "5a679d1" }
+spl-nonce-interface = { git = "https://github.com/solana-program/ed25519-programmatic-signer", rev = "5a679d1" }
 mollusk-svm = "0.15.0"
 mollusk-svm-programs-token = "0.15.0"
 solana-account = "4.3.0"

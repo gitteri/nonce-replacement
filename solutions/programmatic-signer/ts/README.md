@@ -7,47 +7,28 @@ Solana Explorer links.
 
 ## Status
 
-All 9 scripts pass on devnet (2026-10-06) and against a local `solana-test-validator` (Agave 4.2.1)
-with the three programs in `.vendor/` deployed through `solana program deploy`. `pnpm test`
-checks the signing path offline: for a fixed key, nonce and payload, the Submit instruction, execution
+All 9 scripts pass on devnet (2026-10-07) against Anza's canonical programs. `pnpm test` checks
+the signing path offline: for a fixed key, nonce and payload, the Submit instruction, execution
 message and next nonce match the Rust client's `presign` byte for byte.
 
-They target this repo's own devnet deployment (see below). The programs at the
-canonical devnet addresses were deployed on 2026-09-22, before upstream moved the execution and
-authorization messages from legacy to v1 (2026-09-25 to 09-29), so a v1 Submit passes the Signer's
-signature check there and then panics in the Executor.
-
-## Devnet deployment
-
-Like Vector, this repo deploys its own copy. `.vendor/` holds the three programs built at upstream
-`e3c948d` with only the `declare_id!` in each interface crate (and the Executor's default nonce program)
-changed to these ids:
+## Programs
 
 | Program  | Id                                             |
 | -------- | ---------------------------------------------- |
-| Signer   | `986H9i8wxYrDsUHtEUR9eNN2tA3Y5xgQDGsfRnhVmgzX` |
-| Executor | `4NPokYh4xsQqs3dnwcJvuLPkuZCFj7x4QVQBChv8SDiQ` |
-| Nonce    | `3nK4iiSeW7Mkx4GRxDXWWEw5H6ZPLG5yETB7JcZTdP5o` |
+| Signer   | `EdSigVfK1DkeMrjFNDMjwfQaJPhPTtX7jW8uPv3oKEgN` |
+| Executor | `ExecxgyHYsAXB4c5dZodV1zJZ9hqfsDCYkRDRATrpkFR` |
+| Nonce    | `Noncediea1fH12usShuQAz28UhgAeuE5Maf32LsMUQB` |
 
 `lib/programs.ts` defaults to them. Set `PS_SIGNER_PROGRAM_ID`, `PS_EXECUTOR_PROGRAM_ID` and
-`PS_NONCE_PROGRAM_ID` to target another deployment. To rebuild, replace the canonical ids in
-`signer/interface/src/lib.rs`, `executor/interface/src/lib.rs`, `executor/interface/src/instruction.rs`
-and `nonce/interface/src/lib.rs`, then run `cargo build-sbf` in each `*/program`.
+`PS_NONCE_PROGRAM_ID` to target another deployment.
 
-These went live on 2026-10-06 at slots 508239079 (Nonce), 508239165 (Executor) and 508239246
-(Signer), with upgrade authority `3C8eBmzGx4TzBMVBeL2jfDodG5dr55mmCJkcWv19J1nE`. The deployed bytes
-match `.vendor/`. Deploying all three costs about 1.4 SOL, paid by the CLI identity, which also
-becomes the upgrade authority:
+Until 2026-10-07 the canonical programs predated upstream's move to v1 messages, so this repo ran
+its own `e3c948d` build at `986H9i8w...`, `4NPokYh4...` and `3nK4iiSe...`. Those are still on devnet
+but nothing here uses them, and they reject Submit from the current client (see below).
 
-```
-solana program deploy -u devnet --program-id .devnet/nonce-program.keypair.json .vendor/spl_nonce_program.so
-solana program deploy -u devnet --program-id .devnet/executor-program.keypair.json .vendor/spl_message_executor_program.so
-solana program deploy -u devnet --program-id .devnet/signer-program.keypair.json .vendor/spl_ed25519_signer_program.so
-```
-
-The ELFs are SBPF v0. Devnet still accepts v0 deployments, but `solana-test-validator` 4.2 enables
-SIMD-0500 by default, which rejects them, so pass `--deactivate-feature
-B8JJXCy5amZyWG9r7EnUYLwzXSXTxG7GZ1qZ1qggo83g` to rehearse a deploy locally.
+Upstream `5a679d1` made each Submit signature optional (`Vec<Option<Signature>>`), so every
+signature now carries a one byte option tag. Clients older than that commit fail against the
+canonical programs, and current clients fail against older builds.
 
 ## Setup
 
@@ -61,7 +42,7 @@ This package keeps its own lockfile outside the repo's pnpm workspace. Adding it
 re-resolves the Next.js `site/` dependencies against Kit 8.
 
 The JS client, `@solana-program/ed25519-programmatic-signer`, is not on npm. Its Codama source is
-vendored at `e3c948d` under `vendor/ed25519-programmatic-signer` (Apache-2.0). It covers instruction
+vendored at `5a679d1` under `vendor/ed25519-programmatic-signer` (Apache-2.0). It covers instruction
 builders, account decoding and the PDA. `lib/programmaticSigner.ts` adds the offline signing that
 the Rust client's `sign_and_submit` does: it compiles the execution message with the nonce in the
 lifetime slot, wraps the Execute instruction in an authorization message, signs that with the cold
@@ -69,13 +50,13 @@ key, and computes successor nonces.
 
 ## Running
 
-Against a local validator:
+Against a local validator, loading the program bytes dumped from devnet into `../rust/fixtures/`:
 
 ```
 solana-test-validator --reset \
-  --bpf-program 986H9i8wxYrDsUHtEUR9eNN2tA3Y5xgQDGsfRnhVmgzX .vendor/spl_ed25519_signer_program.so \
-  --bpf-program 4NPokYh4xsQqs3dnwcJvuLPkuZCFj7x4QVQBChv8SDiQ .vendor/spl_message_executor_program.so \
-  --bpf-program 3nK4iiSeW7Mkx4GRxDXWWEw5H6ZPLG5yETB7JcZTdP5o .vendor/spl_nonce_program.so
+  --bpf-program EdSigVfK1DkeMrjFNDMjwfQaJPhPTtX7jW8uPv3oKEgN ../rust/fixtures/spl_ed25519_signer_program.so \
+  --bpf-program ExecxgyHYsAXB4c5dZodV1zJZ9hqfsDCYkRDRATrpkFR ../rust/fixtures/spl_message_executor_program.so \
+  --bpf-program Noncediea1fH12usShuQAz28UhgAeuE5Maf32LsMUQB ../rust/fixtures/spl_nonce_program.so
 
 # in another shell:
 export DEVNET_RPC_URL=http://127.0.0.1:8899
@@ -102,6 +83,5 @@ lib/                 devnet RPC, keypair funding, sendTx, Explorer links, and th
                      (programmaticSigner.ts) plus per-script setup of cold key, PDA and nonce accounts
 scripts/01-09        one script per functional requirement
 test/                byte-for-byte parity with the Rust client
-vendor/              upstream Codama JS client at e3c948d
-.vendor/             the three programs at e3c948d, built with this repo's devnet ids
+vendor/              upstream Codama JS client at 5a679d1
 ```

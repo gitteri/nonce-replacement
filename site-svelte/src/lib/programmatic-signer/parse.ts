@@ -10,6 +10,7 @@ import {
   type CompiledTransactionMessageWithLifetime,
   type Instruction,
   type ReadonlyUint8Array,
+  unwrapOption,
 } from "@solana/kit";
 import {
   getExecuteInstructionDataDecoder,
@@ -39,14 +40,19 @@ export function decodeSubmit(submitData: ReadonlyUint8Array): DecodedSubmit {
   const addressEncoder = getAddressEncoder();
   const signers = authorization.staticAccounts
     .slice(0, authorization.header.numSignerAccounts)
-    .map((address, i) => ({
-      address,
-      valid: ed25519.verify(
-        signatures[i] as Uint8Array,
-        authorizationBytes as Uint8Array,
-        addressEncoder.encode(address) as Uint8Array
-      ),
-    }));
+    .map((address, i) => {
+      const signature = unwrapOption(signatures[i]);
+      return {
+        address,
+        valid:
+          signature !== null &&
+          ed25519.verify(
+            signature as Uint8Array,
+            authorizationBytes as Uint8Array,
+            addressEncoder.encode(address) as Uint8Array
+          ),
+      };
+    });
 
   const [header] = authorization.instructionHeaders;
   const [payload] = authorization.instructionPayloads;

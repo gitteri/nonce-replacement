@@ -23,6 +23,7 @@ import {
   type CompiledTransactionMessageWithLifetime,
   type ReadonlyUint8Array,
   type SignatureBytes,
+  unwrapOption,
 } from "@solana/kit";
 import { devnetRpc } from "../lib/connection.js";
 import { ensureFunded, loadFunderKeypair, loadOrGenerateKeypair } from "../lib/keypair.js";
@@ -66,11 +67,10 @@ async function main() {
   const authorization = decodeV1(authorizationBytes);
   const signers = authorization.staticAccounts.slice(0, authorization.header.numSignerAccounts);
   for (const [i, signer] of signers.entries()) {
-    const ok = await verifySignature(
-      await getPublicKeyFromAddress(signer),
-      signatures[i] as SignatureBytes,
-      authorizationBytes
-    );
+    const signature = unwrapOption(signatures[i]);
+    const ok =
+      signature !== null &&
+      (await verifySignature(await getPublicKeyFromAddress(signer), signature as SignatureBytes, authorizationBytes));
     console.log(`signer ${signer}: signature ${ok ? "valid" : "INVALID"}`);
     if (!ok) process.exit(1);
   }

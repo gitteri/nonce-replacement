@@ -14,6 +14,8 @@ import {
     getArrayEncoder,
     getBytesDecoder,
     getBytesEncoder,
+    getOptionDecoder,
+    getOptionEncoder,
     getStructDecoder,
     getStructEncoder,
     getU8Decoder,
@@ -27,6 +29,8 @@ import {
     type Instruction,
     type InstructionWithAccounts,
     type InstructionWithData,
+    type Option,
+    type OptionOrNullable,
     type ReadonlyUint8Array,
 } from '@solana/kit';
 import { resolveAuthorizationMessageAccounts } from '../../hooked';
@@ -45,17 +49,23 @@ export type SubmitInstruction<
 
 export type SubmitInstructionData = {
     discriminator: number;
-    signatures: Array<ReadonlyUint8Array>;
+    signatures: Array<Option<ReadonlyUint8Array>>;
     message: ReadonlyUint8Array;
 };
 
-export type SubmitInstructionDataArgs = { signatures: Array<ReadonlyUint8Array>; message: ReadonlyUint8Array };
+export type SubmitInstructionDataArgs = {
+    signatures: Array<OptionOrNullable<ReadonlyUint8Array>>;
+    message: ReadonlyUint8Array;
+};
 
 export function getSubmitInstructionDataEncoder(): Encoder<SubmitInstructionDataArgs> {
     return transformEncoder(
         getStructEncoder([
             ['discriminator', getU8Encoder()],
-            ['signatures', getArrayEncoder(fixEncoderSize(getBytesEncoder(), 64), { size: getU8Encoder() })],
+            [
+                'signatures',
+                getArrayEncoder(getOptionEncoder(fixEncoderSize(getBytesEncoder(), 64)), { size: getU8Encoder() }),
+            ],
             ['message', getBytesEncoder()],
         ]),
         value => ({ ...value, discriminator: SUBMIT_DISCRIMINATOR }),
@@ -65,7 +75,10 @@ export function getSubmitInstructionDataEncoder(): Encoder<SubmitInstructionData
 export function getSubmitInstructionDataDecoder(): Decoder<SubmitInstructionData> {
     return getStructDecoder([
         ['discriminator', getU8Decoder()],
-        ['signatures', getArrayDecoder(fixDecoderSize(getBytesDecoder(), 64), { size: getU8Decoder() })],
+        [
+            'signatures',
+            getArrayDecoder(getOptionDecoder(fixDecoderSize(getBytesDecoder(), 64)), { size: getU8Decoder() }),
+        ],
         ['message', getBytesDecoder()],
     ]);
 }
